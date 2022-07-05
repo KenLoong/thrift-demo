@@ -38,11 +38,13 @@ func main() {
 	protocol := flag.String("P", "binary", "Specify the protocol (binary, compact, json, simplejson)")
 	framed := flag.Bool("framed", false, "Use framed transport")
 	buffered := flag.Bool("buffered", false, "Use buffered transport")
+
+	//服务的监听地址
 	addr := flag.String("addr", "localhost:9090", "Address to listen to")
 
 	flag.Parse()
 
-	//protocol
+	//protocol：协议选择
 	var protocolFactory thrift.TProtocolFactory
 	switch *protocol {
 	case "compact":
@@ -89,6 +91,7 @@ func main() {
 	fmt.Println("Starting the simple server... on ", *addr)
 
 	//start tcp server
+	//简单的单线程服务模型 一般用于测试
 	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 	err = server.Serve()
 
